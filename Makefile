@@ -14,4 +14,4 @@ package-install:
 	python -m pip install dist/*.whl
 
 lint:
-	poetry run flake8 gendiff
+	poetry run flake8

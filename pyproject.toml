@@ -12,6 +12,13 @@ python = "^3.10"
 [tool.poetry.scripts]
 gendiff = "gendiff.scripts.hexlet_code:main"
 
+[tool.poetry.group.dev.dependencies]
+flake8 = "^5.0.4"
+black = "^22.8.0"
+
+[tool.black]
+line-length = 80
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
