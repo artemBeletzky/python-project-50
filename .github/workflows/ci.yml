@@ -27,4 +27,4 @@ jobs:
       - name: lint
         run: make lint
       - name: test
-        run: make test
+        run: poetry run pytest

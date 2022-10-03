@@ -17,4 +17,4 @@ lint:
 	poetry run flake8
 
 test:
-	pytest
+	poetry run test
