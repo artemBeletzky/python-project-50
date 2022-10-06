@@ -1,1 +1,2 @@
-from .gendiff import generate_diff, parse_json_to_dict
+from .gendiff import generate_diff
+from .parsers import parse_file_to_dict
