@@ -27,7 +27,7 @@ def test_flat_yaml():
   + verbose: true
 }"""
     dict_1, dict_2 = parse_file_to_dict(
-        "tests/fixtures/file1.json", "tests/fixtures/file2.yml"
+        "tests/fixtures/file1.yml", "tests/fixtures/file2.yml"
     )
     result = generate_diff(dict_1, dict_2)
     assert expected_result == result
