@@ -1,12 +1,12 @@
 import json
+import pathlib
 import yaml
-import os
 
 
 def parse_file_to_dict(path_to_file_1: str, path_to_file_2: str) -> tuple:
-    file_1_path, file_2_path = os.path.abspath(path_to_file_1), os.path.abspath(
-        path_to_file_2
-    )
+    file_1_path, file_2_path = str(
+        pathlib.Path().cwd().joinpath(path_to_file_1)
+    ), str(pathlib.Path().cwd().joinpath(path_to_file_2))
     with open(file_1_path, "r") as file_1, open(file_2_path, "r") as file_2:
         if (
             file_1_path.split(".")[1] == "yml"
@@ -27,8 +27,3 @@ def parse_file_to_dict(path_to_file_1: str, path_to_file_2: str) -> tuple:
             )
             # TODO exception?
     return file_1_dict, file_2_dict
-
-
-print(
-    parse_file_to_dict("tests/fixtures/file1.json", "tests/fixtures/file2.json")
-)
