@@ -3,7 +3,9 @@ import pathlib
 import yaml
 
 
-def parse_file_to_dict(path_to_file_1: str, path_to_file_2: str) -> tuple:
+def deserialize_files_to_dict(
+    path_to_file_1: str, path_to_file_2: str
+) -> tuple:
     file_1_path, file_2_path = str(
         pathlib.Path().cwd().joinpath(path_to_file_1)
     ), str(pathlib.Path().cwd().joinpath(path_to_file_2))

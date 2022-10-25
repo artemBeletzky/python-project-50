@@ -1,4 +1,4 @@
-from gendiff import parse_file_to_dict, generate_diff
+from gendiff import deserialize_files_to_dict, generate_diff
 
 
 def test_flat_json():
@@ -10,7 +10,7 @@ def test_flat_json():
   + timeout: 20
   + verbose: true
 }"""
-    dict_1, dict_2 = parse_file_to_dict(
+    dict_1, dict_2 = deserialize_files_to_dict(
         "tests/fixtures/file1_flat.json", "tests/fixtures/file2_flat.json"
     )
     result = generate_diff(dict_1, dict_2)

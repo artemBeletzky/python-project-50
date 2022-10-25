@@ -1,2 +1,2 @@
 from .gendiff import generate_diff
-from .parsers import parse_file_to_dict
+from .deserialize import deserialize_files_to_dict

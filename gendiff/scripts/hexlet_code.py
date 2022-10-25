@@ -2,12 +2,12 @@
 
 from ..cli import parse_args
 from ..gendiff import generate_diff
-from gendiff import parse_file_to_dict
+from gendiff import deserialize_files_to_dict
 
 
 def main():
     parsed = parse_args()
-    dicts = parse_file_to_dict(parsed.first_file, parsed.second_file)
+    dicts = deserialize_files_to_dict(parsed.first_file, parsed.second_file)
     result = generate_diff(*dicts)
     print(result)
 
