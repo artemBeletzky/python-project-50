@@ -154,72 +154,32 @@ nested_diff = [
 
 def format_node(node: dict) -> str:
     key = gendiff.get_name(node)
-    value = json.dumps(gendiff.get_value(node))
+    value = json.dumps(gendiff.get_value(node), indent="\t")
     old_value = (
-        json.dumps(gendiff.get_old_value(node))
+        json.dumps(gendiff.get_old_value(node), indent="\t")
         if gendiff.get_status(node) == "updated"
         else None
     )
+    # TODO ПОПРОБУЙ ДАМПНУТЬ СЛОВАРИ А НЕ СОСТАВЛЯТЬ СТРОКИ ВРУЧНУЮ
     if gendiff.is_leaf(node):
         if gendiff.get_status(node) == "missing":
-            return "".join(("  - ", f"{key}", ": ", value))
+            return "".join(("- ", f"{key}", ": ", value, "\n"))
         if gendiff.get_status(node) == "both":
-            return "".join(("    ", f"{key}", ": ", value))
+            return "".join(("  ", f"{key}", ": ", value, "\n"))
         if gendiff.get_status(node) == "new":
-            return "".join(("  + ", f"{key}", ": ", value))
+            return "".join(("+ ", f"{key}", ": ", value, "\n"))
         if gendiff.get_status(node) == "updated":
-            return "".join(("  - ", f"{key}", ": ", old_value)) + "\n" + "".join(("  + ", f"{key}", ": ", value))
+            return "".join(("- ", f"{key}", ": ", old_value, "\n")) + "".join(("+ ", f"{key}", ": ", value, "\n"))
 
-
-# reduce (if it has children) -> return string with the name of parent (+ tab) and recursive reduce children to
 
 def foo(diff):
+    result = ""
     for node in diff:
-        if gendiff.is_leaf(node):
-            print(format_node(node))
+        if not gendiff.is_leaf(node):
+            result += f"{gendiff.get_name(node)}: {{\n{foo(gendiff.get_children(node))}}}\n"
         else:
-            print(gendiff.get_name(node))
-            print(foo(gendiff.get_children(node)))
-
-foo(nested_diff)
-# ВЕРНИ ВЫЗОВ ФУНКЦИИ И +
+            result += "  " + format_node(node)
+    return result
 
 
-# def foo(diff) -> str:
-#     unique_keys = sorted({*dict.keys(dict_1), *dict.keys(dict_2)})
-#     content = []
-#     for key in unique_keys:
-#         dict_1_value, dict_2_value = dict_1.get(key), dict_2.get(key)
-#         dict_1_value_serialized = (
-#             json.dumps(dict_1_value)
-#             if type(dict_1_value) is not str
-#             else dict_1_value
-#         )
-#         dict_2_value_serialized = (
-#             json.dumps(dict_2_value)
-#             if type(dict_2_value) is not str
-#             else dict_2_value
-#         )
-#         if dict_1_value and dict_2_value:
-#             if dict_1_value == dict_2_value:
-#                 content.append(
-#                     "".join(("    ", f"{key}", ": ", dict_1_value_serialized))
-#                 )
-#             else:
-#                 content.append(
-#                     "".join(("  - ", f"{key}", ": ", dict_1_value_serialized))
-#                 )
-#                 content.append(
-#                     "".join(("  + ", f"{key}", ": ", dict_2_value_serialized))
-#                 )
-#         if dict_2_value is None:
-#             content.append(
-#                 "".join(("  - ", f"{key}", ": ", dict_1_value_serialized))
-#             )
-#         if dict_1_value is None:
-#             content.append(
-#                 "".join(("  + ", f"{key}", ": ", dict_2_value_serialized))
-#             )
-#
-#     joined_lines = "\n".join(content)
-#     return f"{{\n{joined_lines}\n}}"
+print(foo(nested_diff))
