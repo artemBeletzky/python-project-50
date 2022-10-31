@@ -31,6 +31,18 @@ def get_name(node):
     return node["node_name"]
 
 
+# TODO create types for nodes
+# TODO add a functions to create nodes
+
+# def create_node(node):
+#     if is_leaf():
+#         pass
+#
+#
+# def check_status(node_1, node_2, key):
+#     pass
+
+
 def generate_diff(items_1: dict, items_2: dict):
     missing_node = MissingNode()
 
