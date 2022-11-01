@@ -42,7 +42,7 @@ def get_name(node):
 # def check_status(node_1, node_2, key):
 #     pass
 
-
+# MAKE ,ISSING NODE AN AN EMPRY DICT??
 def generate_diff(items_1: dict, items_2: dict):
     missing_node = MissingNode()
 
@@ -91,6 +91,16 @@ def generate_diff(items_1: dict, items_2: dict):
                     )
                     continue
             if node_1_value is missing_node:
+                if isinstance(node_2_value, dict):
+                    result.append(
+                        {
+                            "node_name": key,
+                            "status": "new",
+                            "is_leaf": False,
+                            "children": [*inner({}, node_2_value)],
+                        }
+                    )
+                    continue
                 result.append(
                     {
                         "node_name": key,

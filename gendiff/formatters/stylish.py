@@ -12,20 +12,22 @@ def format_node(node: dict) -> str:
         if gendiff.get_status(node) == "updated"
         else None
     )
-    value_formatted = value if isinstance(value, str) else json.dumps(value)
-    old_value_formatted = old_value if isinstance(old_value, str) else json.dumps(old_value)
+    # value_formatted = value if isinstance(value, str) else json.dumps(value)
+    # old_value_formatted = old_value if isinstance(old_value, str) else json.dumps(old_value)
+    value_formatted = json.dumps(value, indent="\t")
+    old_value_formatted = json.dumps(old_value, indent="\t")
     if gendiff.is_leaf(node):
         if gendiff.get_status(node) == "missing_node":
-            return "".join(("- ", f"{key}", ": ", value_formatted)) + "\n"
+            return "\t" + "".join(("- ", f"{key}", ": ", value_formatted)) + "\n"
         if gendiff.get_status(node) == "both":
-            return "".join(("  ", f"{key}", ": ", value_formatted)) + "\n"
+            return "\t" + "".join(("  ", f"{key}", ": ", value_formatted)) + "\n"
         if gendiff.get_status(node) == "new":
-            return "".join(("+ ", f"{key}", ": ", value_formatted)) + "\n"
+            return "\t" + "".join(("+ ", f"{key}", ": ", value_formatted)) + "\n"
         if gendiff.get_status(node) == "updated":
             return (
-                    "".join(("- ", f"{key}", ": ", old_value_formatted))
+                    "\t" + "".join(("- ", f"{key}", ": ", old_value_formatted))
                     + "\n\t"
-                    + "".join(("+ ", f"{key}", ": ", value_formatted, "\n"))
+                    + "\t" + "".join(("+ ", f"{key}", ": ", value_formatted, "\n"))
             )
 
 
@@ -33,7 +35,7 @@ def format_diff_stylish(diff: list) -> str:
     result = ""
     for node in diff:
         if not gendiff.is_leaf(node):
-            result += f"{gendiff.get_name(node)}: {{\n{format_diff_stylish(gendiff.get_children(node))}}}\n"
+            result += f"\t{gendiff.get_name(node)}: {format_diff_stylish(gendiff.get_children(node))}"
         else:
             result += "\t" + format_node(node)
     return f"{{\n{result}}}\n"
