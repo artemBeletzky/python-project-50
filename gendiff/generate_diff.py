@@ -42,8 +42,8 @@ def get_name(node):
 # def check_status(node_1, node_2, key):
 #     pass
 
-# MAKE ,ISSING NODE AN AN EMPRY DICT??
-def generate_diff(items_1: dict, items_2: dict):
+# MAKE MISSING NODE AN EMPTY DICT?
+def generate_diff(items_1: dict, items_2: dict) -> list:
     missing_node = MissingNode()
 
     def inner(node_1, node_2):
