@@ -2,7 +2,6 @@ import functools
 import json
 import operator
 import re
-
 import gendiff
 
 
