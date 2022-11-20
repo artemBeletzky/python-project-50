@@ -1,1 +1,1 @@
-from .stylish import format_diff_stylish
+from .stylish import format_stylish
