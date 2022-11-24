@@ -8,3 +8,4 @@ from .gendiff import (
     get_children,
     is_leaf,
 )
+from .cli import setup_argument_parser

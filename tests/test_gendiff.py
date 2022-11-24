@@ -62,3 +62,6 @@ def test_nested_yaml():
     diff = generate_diff(dict_1, dict_2)
     result = stylish(diff)
     assert result == expected_result
+
+
+# TODO ADD TESTS FOR PLAIN

@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 
-from gendiff.cli import parse_args
+from gendiff import setup_argument_parser
 from gendiff import deserialize_files_to_dict, generate_diff
-from gendiff.formatters import stylish
+from gendiff.formatters import stylish, plain
 
 
 def main():
-    parsed_args = parse_args()
-    dicts = deserialize_files_to_dict(
-        parsed_args.first_file, parsed_args.second_file
-    )
+    parser = setup_argument_parser()
+    args = parser.parse_args()
+    dicts = deserialize_files_to_dict(args.first_file, args.second_file)
     diff = generate_diff(*dicts)
-    result = stylish(diff)
-    print(result)
+    formatted_diff = None
+    if args.format == "stylish":
+        formatted_diff = stylish(diff)
+    if args.format == "plain":
+        formatted_diff = plain(diff)
+    print(formatted_diff)
 
 
 if __name__ == "__main__":

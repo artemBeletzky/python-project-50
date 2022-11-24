@@ -2,9 +2,11 @@ import functools
 import json
 import operator
 import re
+
 import gendiff
 
 
+# TODO Use function from plain formatter
 def flatten_nested_list(nested_list) -> list:
     temp_list = []
     for el in nested_list:
@@ -15,6 +17,7 @@ def flatten_nested_list(nested_list) -> list:
     return functools.reduce(operator.iconcat, temp_list, [])
 
 
+# TODO FIX setting5 indentation!!
 def format_node(node) -> list | tuple:
     key = gendiff.get_name(node)
     status = gendiff.get_status(node)

@@ -42,7 +42,12 @@ def get_name(node):
 # def check_status(node_1, node_2, key):
 #     pass
 
-# MAKE MISSING NODE AN EMPTY DICT?
+# TODO
+# from gendiff import generate_diff
+# diff = generate_diff(file_path1, file_path2, format_name)
+# print(diff)
+
+
 def generate_diff(items_1: dict, items_2: dict) -> list:
     removed_node = RemovedNode()
 
