@@ -2,7 +2,7 @@
 
 from gendiff.cli import parse_args
 from gendiff import deserialize_files_to_dict, generate_diff
-from gendiff.formatters import format_stylish
+from gendiff.formatters import stylish
 
 
 def main():
@@ -11,7 +11,7 @@ def main():
         parsed_args.first_file, parsed_args.second_file
     )
     diff = generate_diff(*dicts)
-    result = format_stylish(diff)
+    result = stylish(diff)
     print(result)
 
 

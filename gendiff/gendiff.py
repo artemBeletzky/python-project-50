@@ -1,4 +1,4 @@
-class MissingNode:
+class RemovedNode:
     def __init__(self):
         self.value = None
 
@@ -44,18 +44,18 @@ def get_name(node):
 
 # MAKE MISSING NODE AN EMPTY DICT?
 def generate_diff(items_1: dict, items_2: dict) -> list:
-    missing_node = MissingNode()
+    removed_node = RemovedNode()
 
     def inner(node_1, node_2):
         sorted_set_of_keys = sorted({*dict.keys(node_1), *dict.keys(node_2)})
         result = []
         for key in sorted_set_of_keys:
             node_1_value, node_2_value = node_1.get(
-                key, missing_node
-            ), node_2.get(key, missing_node)
+                key, removed_node
+            ), node_2.get(key, removed_node)
             if (
-                node_1_value is not missing_node
-                and node_2_value is not missing_node
+                node_1_value is not removed_node
+                and node_2_value is not removed_node
             ):
                 if isinstance(node_1_value, dict) and isinstance(
                     node_2_value, dict
@@ -90,7 +90,7 @@ def generate_diff(items_1: dict, items_2: dict) -> list:
                         }
                     )
                     continue
-            if node_1_value is missing_node:
+            if node_1_value is removed_node:
                 if isinstance(node_2_value, dict):
                     result.append(
                         {
@@ -110,12 +110,12 @@ def generate_diff(items_1: dict, items_2: dict) -> list:
                     }
                 )
                 continue
-            if node_2_value is missing_node:
+            if node_2_value is removed_node:
                 result.append(
                     {
                         "node_name": key,
                         "value": node_1_value,
-                        "status": "missing_node",
+                        "status": "removed",
                         "is_leaf": True,
                     }
                 )

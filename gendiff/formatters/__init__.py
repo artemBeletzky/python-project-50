@@ -1,1 +1,1 @@
-from .stylish import format_stylish
+from .stylish import stylish

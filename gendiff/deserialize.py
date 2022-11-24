@@ -6,14 +6,12 @@ import yaml
 def deserialize_files_to_dict(
     path_to_file_1: str, path_to_file_2: str
 ) -> tuple:
-    """Returns a tuple of dicts containing data from provided files.
+    """
+    Returns a tuple of dicts containing data from provided files
 
     :param path_to_file_1: path to the first file
-    :type path_to_file_1: str
     :param path_to_file_2: path to the second file
-    :type path_to_file_2: str
     :return: tuple that contains 2 dict elements
-    :rtype: tuple
     """
     file_1_path, file_2_path = str(
         pathlib.Path().cwd().joinpath(path_to_file_1)

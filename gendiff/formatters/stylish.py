@@ -5,9 +5,6 @@ import re
 import gendiff
 
 
-# TODO какие методы используются при работе с diff?
-
-
 def flatten_nested_list(nested_list) -> list:
     temp_list = []
     for el in nested_list:
@@ -23,7 +20,7 @@ def format_node(node) -> list | tuple:
     status = gendiff.get_status(node)
     value = gendiff.get_value(node)
     old_value = gendiff.get_old_value(node) if status == "updated" else None
-    if status == "missing_node":
+    if status == "removed":
         return f"-  {key}", value
     if status == "both":
         return f"   {key}", value
@@ -44,7 +41,7 @@ def format_diff(node: dict) -> tuple | list:
         return name, dict(children_flattened)
 
 
-def format_stylish(diff: list) -> str:
+def stylish(diff: list) -> str:
     diff_formatted = list(map(format_diff, diff))
     json_converted = json.dumps(
         dict(flatten_nested_list(diff_formatted)), indent="\t"
