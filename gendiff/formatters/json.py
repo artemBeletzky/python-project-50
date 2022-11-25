@@ -16,20 +16,19 @@ def flatten_nested_list(nested_list) -> list:
     return functools.reduce(operator.iconcat, temp_list, [])
 
 
-# TODO FIX setting5 indentation!!
 def format_node(node) -> list | tuple:
     key = gendiff.get_name(node)
     status = gendiff.get_status(node)
     value = gendiff.get_value(node)
     old_value = gendiff.get_old_value(node) if status == "updated" else None
     if status == "removed":
-        return f"-  {key}", value
+        return "removed", f"{key}: {value}"
     if status == "both":
-        return f"   {key}", value
+        return "present in both", f"{key}: {value}"
     if status == "new":
-        return f"+  {key}", value
+        return "added", f"{key}: {value}"
     if status == "updated":
-        return [(f"-  {key}", old_value), (f"+  {key}", value)]
+        return [("removed", f"{key}: {old_value}"), ("added", f"{key}: {value}")]
 
 
 def format_diff(node: dict) -> tuple | list:
@@ -43,10 +42,9 @@ def format_diff(node: dict) -> tuple | list:
         return name, dict(children_flattened)
 
 
-def stylish(diff: list) -> str:
+def json_formatter(diff: list) -> str:
     diff_formatted = list(map(format_diff, diff))
     json_converted = json.dumps(
         dict(flatten_nested_list(diff_formatted)), indent="\t"
     )
-    quotes_and_commas_removed = re.sub('[,"]', "", json_converted)
-    return quotes_and_commas_removed
+    return json_converted

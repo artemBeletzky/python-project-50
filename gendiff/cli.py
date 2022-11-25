@@ -13,6 +13,6 @@ def setup_argument_parser():
         type=str,
         default="stylish",
         help="Specify format of output",
-        choices=["stylish", "plain"],
+        choices=["stylish", "plain", "json"],
     )
     return parser

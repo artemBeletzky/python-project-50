@@ -129,3 +129,8 @@ def generate_diff(items_1: dict, items_2: dict) -> list:
         return result
 
     return inner(items_1, items_2)
+
+# TODO
+# from gendiff import generate_diff
+# diff = generate_diff(file_path1, file_path2, format_name)
+# print(diff)

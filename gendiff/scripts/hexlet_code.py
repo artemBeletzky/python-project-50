@@ -2,7 +2,7 @@
 
 from gendiff import setup_argument_parser
 from gendiff import deserialize_files_to_dict, generate_diff
-from gendiff.formatters import stylish, plain
+from gendiff.formatters import stylish, plain, json_formatter
 
 
 def main():
@@ -15,6 +15,8 @@ def main():
         formatted_diff = stylish(diff)
     if args.format == "plain":
         formatted_diff = plain(diff)
+    if args.format == "json":
+        formatted_diff = json_formatter(diff)
     print(formatted_diff)
 
 
