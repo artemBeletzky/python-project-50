@@ -1,38 +1,38 @@
 import json
-import pathlib
 import yaml
+from .read_data import read_files_from_disk
 
 
-def deserialize_files_to_dict(
+def convert_files_to_dict(
     path_to_file_1: str, path_to_file_2: str
-) -> tuple:
+) -> tuple[dict, dict]:
     """
     Returns a tuple of dicts containing data from provided files
 
     :param path_to_file_1: path to the first file
     :param path_to_file_2: path to the second file
-    :return: tuple that contains 2 dict elements
+    :return: tuple that contains two dict elements
     """
-    file_1_path, file_2_path = str(
-        pathlib.Path().cwd().joinpath(path_to_file_1)
-    ), str(pathlib.Path().cwd().joinpath(path_to_file_2))
-    with open(file_1_path, "r") as file_1, open(file_2_path, "r") as file_2:
-        if (
-            file_1_path.split(".")[1] == "yml"
-            and file_2_path.split(".")[1] == "yml"
-        ):
-            file_1_dict, file_2_dict = yaml.load(
-                file_1, yaml.SafeLoader
-            ), yaml.load(file_2, yaml.SafeLoader)
-        elif (
-            file_1_path.split(".")[1] == "json"
-            and file_2_path.split(".")[1] == "json"
-        ):
-            file_1_dict, file_2_dict = json.load(file_1), json.load(file_2)
-        else:
-            raise IOError(
-                "File extension is not supported or files extensions aren't "
-                "the same, both files should have .json or .yml extensions."
-            )
-            # TODO exception?
-    return file_1_dict, file_2_dict
+    file_1_data, file_2_data = read_files_from_disk(
+        path_to_file_1, path_to_file_2
+    )
+    if (
+        path_to_file_1.split(".")[1] == "yml"
+        and path_to_file_2.split(".")[1] == "yml"
+    ):
+        file_1_converted, file_2_converted = yaml.load(
+            file_1_data, yaml.SafeLoader
+        ), yaml.load(file_2_data, yaml.SafeLoader)
+    elif (
+        path_to_file_1.split(".")[1] == "json"
+        and path_to_file_2.split(".")[1] == "json"
+    ):
+        file_1_converted, file_2_converted = json.loads(
+            file_1_data
+        ), json.loads(file_2_data)
+    else:
+        raise Exception(
+            "File extension is not supported or files has extensions that aren't "
+            "the same, both files should have .json or .yml extensions."
+        )
+    return file_1_converted, file_2_converted

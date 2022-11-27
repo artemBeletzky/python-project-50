@@ -1,4 +1,5 @@
-from .deserialize import deserialize_files_to_dict
+from .cli import setup_argument_parser
+from .deserialize import convert_files_to_dict
 from .gendiff import (
     generate_diff,
     get_name,
@@ -8,4 +9,3 @@ from .gendiff import (
     get_children,
     is_leaf,
 )
-from .cli import setup_argument_parser

@@ -1,7 +1,6 @@
 import functools
 import json
 import operator
-import re
 import gendiff
 
 
@@ -28,7 +27,10 @@ def format_node(node) -> list | tuple:
     if status == "new":
         return "added", f"{key}: {value}"
     if status == "updated":
-        return [("removed", f"{key}: {old_value}"), ("added", f"{key}: {value}")]
+        return [
+            ("removed", f"{key}: {old_value}"),
+            ("added", f"{key}: {value}"),
+        ]
 
 
 def format_diff(node: dict) -> tuple | list:
