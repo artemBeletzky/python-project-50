@@ -6,7 +6,9 @@ def test_flat_json():
         "{\n\t-  follow: false\n\t   host: hexlet.io\n\t-  proxy: 123.234.53.22\n\t-  timeout: 50\n\t+  "
         "timeout: 20\n\t+  verbose: true\n}"
     )
-    diff = generate_diff("tests/fixtures/file1_flat.json", "tests/fixtures/file2_flat.json")
+    diff = generate_diff(
+        "tests/fixtures/file1_flat.json", "tests/fixtures/file2_flat.json"
+    )
     assert diff == expected_result
 
 
@@ -15,7 +17,9 @@ def test_flat_yaml():
         "{\n\t-  follow: false\n\t   host: hexlet.io\n\t-  proxy: 123.234.53.22\n\t-  timeout: 50\n\t+  "
         "timeout: 20\n\t+  verbose: true\n}"
     )
-    diff = generate_diff("tests/fixtures/file1_flat.yml", "tests/fixtures/file2_flat.yml")
+    diff = generate_diff(
+        "tests/fixtures/file1_flat.yml", "tests/fixtures/file2_flat.yml"
+    )
     assert diff == expected_result
 
 
@@ -29,7 +33,9 @@ def test_nested_json():
         "str\n\t}\n\t-  group2: {\n\t\tabc: 12345\n\t\tdeep: {\n\t\t\tid: 45\n\t\t}\n\t}\n\tgroup3: {"
         "\n\t\tdeep: {\n\t\t\tid: {\n\t\t\t\t+  number: 45\n\t\t\t}\n\t\t}\n\t\t+  fee: 100500\n\t}\n}"
     )
-    diff = generate_diff("tests/fixtures/file1_nested.json", "tests/fixtures/file2_nested.json")
+    diff = generate_diff(
+        "tests/fixtures/file1_nested.json", "tests/fixtures/file2_nested.json"
+    )
     assert diff == expected_result
 
 
@@ -43,7 +49,9 @@ def test_nested_yaml():
         "str\n\t}\n\t-  group2: {\n\t\tabc: 12345\n\t\tdeep: {\n\t\t\tid: 45\n\t\t}\n\t}\n\tgroup3: {"
         "\n\t\tdeep: {\n\t\t\tid: {\n\t\t\t\t+  number: 45\n\t\t\t}\n\t\t}\n\t\t+  fee: 100500\n\t}\n}"
     )
-    diff = generate_diff("tests/fixtures/file1_nested.json", "tests/fixtures/file2_nested.json")
+    diff = generate_diff(
+        "tests/fixtures/file1_nested.json", "tests/fixtures/file2_nested.json"
+    )
     assert diff == expected_result
 
 # TODO ADD TESTS FOR PLAIN

@@ -8,7 +8,9 @@ def main():
     parser = setup_argument_parser()
     args = parser.parse_args()
     format_name = args.format
-    diff = generate_diff(args.first_file_path, args.second_file_path, format_name)
+    diff = generate_diff(
+        args.first_file_path, args.second_file_path, format_name
+    )
     print(diff)
 
 
