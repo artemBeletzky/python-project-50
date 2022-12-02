@@ -1,4 +1,4 @@
-from gendiff import convert_files_to_dict, generate_diff
+from gendiff import generate_diff
 
 
 def test_flat_json():

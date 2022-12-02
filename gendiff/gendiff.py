@@ -91,6 +91,7 @@ def inner(node_1, node_2) -> list:
 
 def generate_diff(file_1_path: str, file_2_path: str, format_name='stylish') -> str:
     items_1, items_2 = convert_files_to_dict(file_1_path, file_2_path)
+    print(items_1, items_2)
     diff = inner(items_1, items_2)
     if format_name == "stylish":
         formatted_diff = format_as_stylish(diff)

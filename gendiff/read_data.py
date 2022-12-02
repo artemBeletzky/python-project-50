@@ -22,4 +22,5 @@ def read_files_from_disk(
         file_2_path_joined, "r"
     ) as f_2:
         file_1_data, file_2_data = f_1.read(), f_2.read()
+    print(file_1_data, file_2_data)
     return file_1_data, file_2_data
