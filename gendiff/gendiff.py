@@ -1,3 +1,4 @@
+from gendiff import convert_files_to_dict
 from gendiff.formatters import format_as_json, format_as_stylish, format_as_plain
 
 
@@ -88,7 +89,8 @@ def inner(node_1, node_2) -> list:
     return result
 
 
-def generate_diff(items_1: dict, items_2: dict, format_name='stylish') -> str:
+def generate_diff(file_1_path: str, file_2_path: str, format_name='stylish') -> str:
+    items_1, items_2 = convert_files_to_dict(file_1_path, file_2_path)
     diff = inner(items_1, items_2)
     if format_name == "stylish":
         formatted_diff = format_as_stylish(diff)
