@@ -35,7 +35,7 @@ def format_node(node) -> list | tuple:
 
 def format_diff(node: dict) -> tuple | list:
     name = gendiff.get_name(node)
-    if gendiff.is_leaf(node):
+    if gendiff.has_children(node):
         return format_node(node)
     else:
         children = gendiff.get_children(node)

@@ -7,5 +7,5 @@ from .gendiff import (
     get_value,
     get_old_value,
     get_children,
-    is_leaf,
+    has_children,
 )

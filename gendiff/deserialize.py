@@ -32,7 +32,8 @@ def convert_files_to_dict(
         ), json.loads(file_2_data)
     else:
         raise Exception(
-            "File extension is not supported or files has extensions that aren't "
-            "the same, both files should have .json or .yml extensions."
+            """File extension is not supported or files has extensions
+            that aren't the same, both files should have .json or .yml
+            extensions."""
         )
     return file_1_converted, file_2_converted
