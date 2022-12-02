@@ -23,13 +23,13 @@ def format_node(node) -> list | tuple:
     value = gendiff.get_value(node)
     old_value = gendiff.get_old_value(node) if status == "updated" else None
     if status == "removed":
-        return f"-  {key}", value
+        return f"- {key}", value
     if status == "both":
-        return f"   {key}", value
+        return f"  {key}", value
     if status == "new":
-        return f"+  {key}", value
+        return f"+ {key}", value
     if status == "updated":
-        return [(f"-  {key}", old_value), (f"+  {key}", value)]
+        return [(f"- {key}", old_value), (f"+ {key}", value)]
 
 
 def format_diff(node: dict) -> tuple | list:
@@ -46,7 +46,7 @@ def format_diff(node: dict) -> tuple | list:
 def format_as_stylish(diff: list) -> str:
     diff_formatted = list(map(format_diff, diff))
     json_converted = json.dumps(
-        dict(flatten_nested_list(diff_formatted)), indent="\t"
+        dict(flatten_nested_list(diff_formatted)), indent="    "
     )
     quotes_and_commas_removed = re.sub('[,"]', "", json_converted)
     return quotes_and_commas_removed
