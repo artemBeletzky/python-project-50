@@ -1,24 +1,16 @@
 #!/usr/bin/env python3
 
-from gendiff import setup_argument_parser
 from gendiff import convert_files_to_dict, generate_diff
-from gendiff.formatters import stylish, plain, json_formatter
+from gendiff import setup_argument_parser
 
 
 def main():
     parser = setup_argument_parser()
     args = parser.parse_args()
-    diff = generate_diff(
-        *convert_files_to_dict(args.first_file_path, args.second_file_path)
-    )
-    formatted_diff = None
-    if args.format == "stylish":
-        formatted_diff = stylish(diff)
-    if args.format == "plain":
-        formatted_diff = plain(diff)
-    if args.format == "json":
-        formatted_diff = json_formatter(diff)
-    print(formatted_diff)
+    format_name = args.format
+    items_1, items_2 = convert_files_to_dict(args.first_file_path, args.second_file_path)
+    diff = generate_diff(items_1, items_2, format_name)
+    print(diff)
 
 
 if __name__ == "__main__":

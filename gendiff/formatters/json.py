@@ -44,7 +44,7 @@ def format_diff(node: dict) -> tuple | list:
         return name, dict(children_flattened)
 
 
-def json_formatter(diff: list) -> str:
+def format_as_json(diff: list) -> str:
     diff_formatted = list(map(format_diff, diff))
     json_converted = json.dumps(
         dict(flatten_nested_list(diff_formatted)), indent="\t"

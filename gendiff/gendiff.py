@@ -1,3 +1,6 @@
+from gendiff.formatters import format_as_json, format_as_stylish, format_as_plain
+
+
 def has_children(node: dict) -> bool:
     return node.get("children") is not None
 
@@ -27,7 +30,7 @@ def create_node_with_children(node_name: str, status: str, children: list):
 
 
 def create_node_without_children(
-    node_name: str, status: str, value: any, old_value=None
+        node_name: str, status: str, value: any, old_value=None
 ):
     node = {"node_name": node_name, "status": status, "value": value}
     if old_value is not None:
@@ -36,134 +39,61 @@ def create_node_without_children(
     return node
 
 
-# TODO
-# from gendiff import generate_diff
-# diff = generate_diff(file_path1, file_path2, format_name)
-# print(diff)
-
-
-def generate_diff(items_1: dict, items_2: dict) -> list:
-    def inner(node_1, node_2) -> list:
-        sorted_set_of_keys = sorted({*dict.keys(node_1), *dict.keys(node_2)})
-        result = []
-        for key in sorted_set_of_keys:
-            node_1_value, node_2_value = node_1.get(
-                key, "not found"
-            ), node_2.get(key, "not found")
-            if "not found" not in (node_1_value, node_2_value):
-                if isinstance(node_1_value, dict) and isinstance(
+def inner(node_1, node_2) -> list:
+    sorted_set_of_keys = sorted({*dict.keys(node_1), *dict.keys(node_2)})
+    result = []
+    for key in sorted_set_of_keys:
+        node_1_value, node_2_value = node_1.get(
+            key, "not found"
+        ), node_2.get(key, "not found")
+        if "not found" not in (node_1_value, node_2_value):
+            if isinstance(node_1_value, dict) and isinstance(
                     node_2_value, dict
-                ):
-                    children = [*inner(node_1_value, node_2_value)]
-                    node = create_node_with_children(
-                        node_name=key, status="both", children=children
-                    )
-                    result.append(node)
-                elif node_1_value == node_2_value:
-                    node = create_node_without_children(
-                        node_name=key, status="both", value=node_1_value
-                    )
-                    result.append(node)
-                elif node_1_value != node_2_value:
-                    node = create_node_without_children(
-                        node_name=key,
-                        status="updated",
-                        value=node_2_value,
-                        old_value=node_1_value,
-                    )
-                    result.append(node)
-            if node_1_value == "not found":
-                if isinstance(node_2_value, dict):
-                    children = [*inner({}, node_2_value)]
-                    node = create_node_with_children(
-                        node_name=key, status="new", children=children
-                    )
-                    result.append(node)
-                else:
-                    node = create_node_without_children(
-                        node_name=key, status="new", value=node_2_value
-                    )
-                    result.append(node)
-            if node_2_value == "not found":
-                node = create_node_without_children(
-                    node_name=key, status="removed", value=node_1_value
+            ):
+                children = [*inner(node_1_value, node_2_value)]
+                node = create_node_with_children(
+                    node_name=key, status="both", children=children
                 )
                 result.append(node)
-        return result
+            elif node_1_value == node_2_value:
+                node = create_node_without_children(
+                    node_name=key, status="both", value=node_1_value
+                )
+                result.append(node)
+            elif node_1_value != node_2_value:
+                node = create_node_without_children(
+                    node_name=key,
+                    status="updated",
+                    value=node_2_value,
+                    old_value=node_1_value,
+                )
+                result.append(node)
+        if node_1_value == "not found":
+            if isinstance(node_2_value, dict):
+                children = [*inner({}, node_2_value)]
+                node = create_node_with_children(
+                    node_name=key, status="new", children=children
+                )
+                result.append(node)
+            else:
+                node = create_node_without_children(
+                    node_name=key, status="new", value=node_2_value
+                )
+                result.append(node)
+        if node_2_value == "not found":
+            node = create_node_without_children(
+                node_name=key, status="removed", value=node_1_value
+            )
+            result.append(node)
+    return result
 
-    return inner(items_1, items_2)
 
-
-# def generate_diff(items_1: dict, items_2: dict) -> list:
-#     def inner(node_1, node_2):
-#         sorted_set_of_keys = sorted({*dict.keys(node_1), *dict.keys(node_2)})
-#         result = []
-#         for key in sorted_set_of_keys:
-#             node_1_value, node_2_value = node_1.get(
-#                 key, "not found"
-#             ), node_2.get(key, "not found")
-#             if "not found" not in (
-#                     node_1_value, node_2_value
-#             ):
-#                 if isinstance(node_1_value, dict) and isinstance(
-#                         node_2_value, dict
-#                 ):
-#                     result.append(
-#                         {
-#                             "node_name": key,
-#                             "status": "both",
-#                             "is_leaf": False,
-#                             "children": [*inner(node_1_value, node_2_value)],
-#                         }
-#                     )
-#                 elif node_1_value == node_2_value:
-#                     result.append(
-#                         {
-#                             "node_name": key,
-#                             "value": node_1_value,
-#                             "status": "both",
-#                             "is_leaf": True,
-#                         }
-#                     )
-#                 elif node_1_value != node_2_value:
-#                     result.append(
-#                         {
-#                             "node_name": key,
-#                             "old_value": node_1_value,
-#                             "value": node_2_value,
-#                             "status": "updated",
-#                             "is_leaf": True,
-#                         }
-#                     )
-#             if node_1_value == "not found":
-#                 if isinstance(node_2_value, dict):
-#                     result.append(
-#                         {
-#                             "node_name": key,
-#                             "status": "new",
-#                             "is_leaf": False,
-#                             "children": [*inner({}, node_2_value)],
-#                         }
-#                     )
-#                 else:
-#                     result.append(
-#                         {
-#                             "node_name": key,
-#                             "value": node_2_value,
-#                             "status": "new",
-#                             "is_leaf": True,
-#                         }
-#                     )
-#             if node_2_value == "not found":
-#                 result.append(
-#                     {
-#                         "node_name": key,
-#                         "value": node_1_value,
-#                         "status": "removed",
-#                         "is_leaf": True,
-#                     }
-#                 )
-#
-#         return result
-#
-#     return inner(items_1, items_2)
+def generate_diff(items_1: dict, items_2: dict, format_name='stylish') -> str:
+    diff = inner(items_1, items_2)
+    if format_name == "stylish":
+        formatted_diff = format_as_stylish(diff)
+    if format_name == "plain":
+        formatted_diff = format_as_plain(diff)
+    if format_name == "json":
+        formatted_diff = format_as_json(diff)
+    return formatted_diff

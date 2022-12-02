@@ -1,5 +1,4 @@
 from gendiff import convert_files_to_dict, generate_diff
-from gendiff.formatters import stylish
 
 
 def test_flat_json():
@@ -11,8 +10,7 @@ def test_flat_json():
         "tests/fixtures/file1_flat.json", "tests/fixtures/file2_flat.json"
     )
     diff = generate_diff(dict_1, dict_2)
-    result = stylish(diff)
-    assert result == expected_result
+    assert diff == expected_result
 
 
 def test_flat_yaml():
@@ -24,8 +22,7 @@ def test_flat_yaml():
         "tests/fixtures/file1_flat.yml", "tests/fixtures/file2_flat.yml"
     )
     diff = generate_diff(dict_1, dict_2)
-    result = stylish(diff)
-    assert result == expected_result
+    assert diff == expected_result
 
 
 def test_nested_json():
@@ -42,8 +39,7 @@ def test_nested_json():
         "tests/fixtures/file1_nested.json", "tests/fixtures/file2_nested.json"
     )
     diff = generate_diff(dict_1, dict_2)
-    result = stylish(diff)
-    assert result == expected_result
+    assert diff == expected_result
 
 
 def test_nested_yaml():
@@ -60,8 +56,6 @@ def test_nested_yaml():
         "tests/fixtures/file1_nested.json", "tests/fixtures/file2_nested.json"
     )
     diff = generate_diff(dict_1, dict_2)
-    result = stylish(diff)
-    assert result == expected_result
-
+    assert diff == expected_result
 
 # TODO ADD TESTS FOR PLAIN
