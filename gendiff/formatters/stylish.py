@@ -46,7 +46,7 @@ def format_diff(node: dict) -> tuple | list:
 def format_as_stylish(diff: list) -> str:
     diff_formatted = list(map(format_diff, diff))
     json_converted = json.dumps(
-        dict(flatten_nested_list(diff_formatted)), indent="    "
+        dict(flatten_nested_list(diff_formatted)), indent="  "
     )
     quotes_and_commas_removed = re.sub('[,"]', "", json_converted)
     return quotes_and_commas_removed
