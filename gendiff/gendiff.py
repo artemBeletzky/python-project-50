@@ -98,6 +98,7 @@ def generate_diff(
 ) -> str:
     items_1, items_2 = convert_files_to_dict(file_1_path, file_2_path)
     diff = inner(items_1, items_2)
+    print("diff:", diff)
     if format_name == "stylish":
         formatted_diff = format_as_stylish(diff)
     if format_name == "plain":
