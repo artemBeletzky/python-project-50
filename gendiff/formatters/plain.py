@@ -2,7 +2,7 @@ import json
 from collections.abc import Iterable
 from numbers import Number
 from types import NoneType
-import gendiff
+from gendiff import generate_difference
 
 
 def flatten(nested_list: Iterable) -> any:
@@ -20,7 +20,7 @@ def flatten(nested_list: Iterable) -> any:
 
 def format_value(input_value: any) -> str:
     """
-    Formats value to fit the formatter
+    Formats value for use with plain formatter
     :param input_value: value to be formatted
     :return: formatted string
     """
@@ -42,18 +42,18 @@ def generate_diff_line(node: dict, path: str) -> str:
     :return:
     """
     result = None
-    status = gendiff.get_status(node)
-    value = format_value(gendiff.get_value(node))
+    presence_status = generate_difference.get_presence_status(node)
+    value = format_value(generate_difference.get_value(node))
     old_value = (
-        format_value(gendiff.get_old_value(node))
-        if status == "updated"
+        format_value(generate_difference.get_old_value(node))
+        if presence_status == "updated"
         else None
     )
-    if status == "new":
+    if presence_status == "added":
         result = f"Property '{path}' was added with value: {value}"
-    if status == "removed":
+    if presence_status == "removed":
         result = f"Property '{path}' was removed"
-    if status == "updated":
+    if presence_status == "updated":
         result = f"Property '{path}' was updated. From {old_value} to {value}"
     return result
 
@@ -67,12 +67,13 @@ def format_node_recursively(diff_node: dict) -> map | str:
 
     def inner(node, path=""):
         result = None
-        name = gendiff.get_name(node)
-        status = gendiff.get_status(node)
+        name = generate_difference.get_name(node)
+        status = generate_difference.get_presence_status(node)
+        value = generate_difference.get_value(node)
         curr_path = path + "." + name if len(path) > 0 else name
-        if not gendiff.has_children(node):
-            children = gendiff.get_children(node)
-            result = map(lambda _node: inner(_node, curr_path), children)
+        if generate_difference.has_children(value):
+            # children = generate_difference.get_value(node)
+            result = map(lambda _node: inner(_node, curr_path), value)
         elif status != "both":
             result = generate_diff_line(node, curr_path)
 

@@ -1,10 +1,10 @@
-from gendiff import generate_diff
+from gendiff.gendiff import generate_diff
 
 
-def test_flat_json():
+def test_flat_json_stylish():
     expected_result = (
-        "{\n\t-  follow: false\n\t   host: hexlet.io\n\t-  proxy: 123.234.53.22\n\t-  timeout: 50\n\t+  "
-        "timeout: 20\n\t+  verbose: true\n}"
+        "'{\\n  - follow: false\\n    host: hexlet.io\\n  - proxy: 123.234.53.22\\n  "
+        "- timeout: 50\\n  + timeout: 20\\n  + verbose: true\\n}'"
     )
     diff = generate_diff(
         "tests/fixtures/file1_flat.json", "tests/fixtures/file2_flat.json"
@@ -12,10 +12,10 @@ def test_flat_json():
     assert diff == expected_result
 
 
-def test_flat_yaml():
+def test_flat_yaml_stylish():
     expected_result = (
-        "{\n\t-  follow: false\n\t   host: hexlet.io\n\t-  proxy: 123.234.53.22\n\t-  timeout: 50\n\t+  "
-        "timeout: 20\n\t+  verbose: true\n}"
+        "'{\\n  - follow: false\\n    host: hexlet.io\\n  - proxy: 123.234.53.22\\n  "
+        "- timeout: 50\\n  + timeout: 20\\n  + verbose: true\\n}'"
     )
     diff = generate_diff(
         "tests/fixtures/file1_flat.yml", "tests/fixtures/file2_flat.yml"
@@ -23,15 +23,20 @@ def test_flat_yaml():
     assert diff == expected_result
 
 
-def test_nested_json():
+def test_nested_json_stylish():
     expected_result = (
-        "{\n\tcommon: {\n\t\t+  follow: false\n\t\t   setting1: Value 1\n\t\t-  setting2: 200\n\t\t-  "
-        "setting3: true\n\t\t+  setting3: null\n\t\t+  setting4: blah blah\n\t\tsetting5: {\n\t\t\t+  "
-        "key5: value5\n\t\t}\n\t\tsetting6: {\n\t\t\tdoge: {\n\t\t\t\t-  wow: \n\t\t\t\t+  wow: so "
-        "much\n\t\t\t}\n\t\t\t   key: value\n\t\t\t+  ops: vops\n\t\t}\n\t}\n\tgroup1: {\n\t\t-  baz: "
-        "bas\n\t\t+  baz: bars\n\t\t   foo: bar\n\t\t-  nest: {\n\t\t\tkey: value\n\t\t}\n\t\t+  nest: "
-        "str\n\t}\n\t-  group2: {\n\t\tabc: 12345\n\t\tdeep: {\n\t\t\tid: 45\n\t\t}\n\t}\n\tgroup3: {"
-        "\n\t\tdeep: {\n\t\t\tid: {\n\t\t\t\t+  number: 45\n\t\t\t}\n\t\t}\n\t\t+  fee: 100500\n\t}\n}"
+        "'{\\n    common: {\\n      + follow: false\\n        setting1: Value "
+        '1\\n      - setting2: 200\\n      - setting3: true\\n      + setting3: '
+        'null\\n      + setting4: blah blah\\n      + setting5: {\\n            key5: '
+        'value5\\n        }\\n        setting6: {\\n            doge: '
+        '{\\n              - wow: \\n              + wow: so much\\n            '
+        '}\\n            key: value\\n          + ops: vops\\n        }\\n    }\\n    '
+        'group1: {\\n      - baz: bas\\n      + baz: bars\\n        foo: bar\\n      '
+        '- nest: {\\n            key: value\\n        }\\n      + nest: str\\n    '
+        '}\\n  - group2: {\\n        abc: 12345\\n        deep: {\\n            id: '
+        '45\\n        }\\n    }\\n  + group3: {\\n        deep: {\\n            id: '
+        '{\\n                number: 45\\n            }\\n        }\\n        fee: '
+        "100500\\n    }\\n}'"
     )
     diff = generate_diff(
         "tests/fixtures/file1_nested.json", "tests/fixtures/file2_nested.json"
@@ -39,15 +44,20 @@ def test_nested_json():
     assert diff == expected_result
 
 
-def test_nested_yaml():
+def test_nested_yaml_stylish():
     expected_result = (
-        "{\n\tcommon: {\n\t\t+  follow: false\n\t\t   setting1: Value 1\n\t\t-  setting2: 200\n\t\t-  "
-        "setting3: true\n\t\t+  setting3: null\n\t\t+  setting4: blah blah\n\t\tsetting5: {\n\t\t\t+  "
-        "key5: value5\n\t\t}\n\t\tsetting6: {\n\t\t\tdoge: {\n\t\t\t\t-  wow: \n\t\t\t\t+  wow: so "
-        "much\n\t\t\t}\n\t\t\t   key: value\n\t\t\t+  ops: vops\n\t\t}\n\t}\n\tgroup1: {\n\t\t-  baz: "
-        "bas\n\t\t+  baz: bars\n\t\t   foo: bar\n\t\t-  nest: {\n\t\t\tkey: value\n\t\t}\n\t\t+  nest: "
-        "str\n\t}\n\t-  group2: {\n\t\tabc: 12345\n\t\tdeep: {\n\t\t\tid: 45\n\t\t}\n\t}\n\tgroup3: {"
-        "\n\t\tdeep: {\n\t\t\tid: {\n\t\t\t\t+  number: 45\n\t\t\t}\n\t\t}\n\t\t+  fee: 100500\n\t}\n}"
+        "'{\\n    common: {\\n      + follow: false\\n        setting1: Value "
+        '1\\n      - setting2: 200\\n      - setting3: true\\n      + setting3: '
+        'null\\n      + setting4: blah blah\\n      + setting5: {\\n            key5: '
+        'value5\\n        }\\n        setting6: {\\n            doge: '
+        '{\\n              - wow: \\n              + wow: so much\\n            '
+        '}\\n            key: value\\n          + ops: vops\\n        }\\n    }\\n    '
+        'group1: {\\n      - baz: bas\\n      + baz: bars\\n        foo: bar\\n      '
+        '- nest: {\\n            key: value\\n        }\\n      + nest: str\\n    '
+        '}\\n  - group2: {\\n        abc: 12345\\n        deep: {\\n            id: '
+        '45\\n        }\\n    }\\n  + group3: {\\n        deep: {\\n            id: '
+        '{\\n                number: 45\\n            }\\n        }\\n        fee: '
+        "100500\\n    }\\n}'"
     )
     diff = generate_diff(
         "tests/fixtures/file1_nested.json", "tests/fixtures/file2_nested.json"
