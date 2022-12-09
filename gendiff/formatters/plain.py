@@ -1,7 +1,5 @@
-import json
 from collections.abc import Iterable
 from numbers import Number
-from types import NoneType
 from gendiff import generate_difference
 
 
@@ -26,8 +24,10 @@ def format_value(input_value: any) -> str:
     """
     if isinstance(input_value, (list, dict)):
         result = "[complex value]"
-    elif isinstance(input_value, (bool, NoneType, Number)):
-        result = json.dumps(input_value)
+    elif isinstance(input_value, Number):
+        result = str(input_value)
+    elif input_value in ("true", "false", "null"):
+        result = input_value
     else:
         result = f"'{input_value}'"
 
@@ -66,18 +66,15 @@ def format_node_recursively(diff_node: dict) -> map | str:
     """
 
     def inner(node, path=""):
-        result = None
         name = generate_difference.get_name(node)
         status = generate_difference.get_presence_status(node)
         value = generate_difference.get_value(node)
         curr_path = path + "." + name if len(path) > 0 else name
+        # TODO fix this
+        if status != "both":
+            return generate_diff_line(node, curr_path)
         if generate_difference.has_children(value):
-            # children = generate_difference.get_value(node)
-            result = map(lambda _node: inner(_node, curr_path), value)
-        elif status != "both":
-            result = generate_diff_line(node, curr_path)
-
-        return result
+            return map(lambda _node: inner(_node, curr_path), value)
 
     return inner(diff_node)
 

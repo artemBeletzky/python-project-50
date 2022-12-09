@@ -1,5 +1,5 @@
-from .deserialize import convert_files_to_dict
 from gendiff.formatters import stylish, json, plain
+from .deserialize import convert_files_to_dict
 from .generate_difference import traverse
 from .utilities import format_nones_and_bools
 
