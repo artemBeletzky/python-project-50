@@ -13,6 +13,7 @@ def generate_diff(
     diff = traverse(
         format_nones_and_bools(items_1), format_nones_and_bools(items_2)
     )
+    formatted_diff = None
 
     if format_name == "stylish":
         formatted_diff = stylish.format_as_stylish(diff)
@@ -20,4 +21,4 @@ def generate_diff(
         formatted_diff = plain.format_as_plain(diff)
     if format_name == "json":
         formatted_diff = json.format_as_json(diff)
-    return repr(formatted_diff)
+    return formatted_diff
