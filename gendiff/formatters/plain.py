@@ -1,6 +1,6 @@
 from collections.abc import Iterable
 from numbers import Number
-from gendiff import generate_difference
+from .. import compose_diff_list
 
 
 def flatten(nested_list: Iterable) -> any:
@@ -42,10 +42,10 @@ def generate_diff_line(node: dict, path: str) -> str:
     :return:
     """
     result = None
-    presence_status = generate_difference.get_presence_status(node)
-    value = format_value(generate_difference.get_value(node))
+    presence_status = compose_diff_list.get_presence_status(node)
+    value = format_value(compose_diff_list.get_value(node))
     old_value = (
-        format_value(generate_difference.get_old_value(node))
+        format_value(compose_diff_list.get_old_value(node))
         if presence_status == "updated"
         else None
     )
@@ -66,14 +66,14 @@ def format_node_recursively(diff_node: dict) -> map | str:
     """
 
     def inner(node, path=""):
-        name = generate_difference.get_name(node)
-        status = generate_difference.get_presence_status(node)
-        value = generate_difference.get_value(node)
+        name = compose_diff_list.get_name(node)
+        status = compose_diff_list.get_presence_status(node)
+        value = compose_diff_list.get_value(node)
         curr_path = path + "." + name if len(path) > 0 else name
         # TODO fix this
         if status != "both":
             return generate_diff_line(node, curr_path)
-        if generate_difference.has_children(value):
+        if compose_diff_list.has_children(value):
             return map(lambda _node: inner(_node, curr_path), value)
 
     return inner(diff_node)

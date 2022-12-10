@@ -1,12 +1,10 @@
 import functools
 import json
 import operator
-from gendiff import generate_difference
+from .. import compose_diff_list
 
 
 # TODO Use function from plain formatter
-
-
 def flatten_nested_list(nested_list) -> list:
     temp_list = []
     for el in nested_list:
@@ -18,11 +16,11 @@ def flatten_nested_list(nested_list) -> list:
 
 
 def format_node(node) -> list | tuple:
-    key = generate_difference.get_name(node)
-    status = generate_difference.get_presence_status(node)
-    value = generate_difference.get_value(node)
+    key = compose_diff_list.get_name(node)
+    status = compose_diff_list.get_presence_status(node)
+    value = compose_diff_list.get_value(node)
     old_value = (
-        generate_difference.get_old_value(node) if status == "updated" else None
+        compose_diff_list.get_old_value(node) if status == "updated" else None
     )
     if status == "removed":
         return "removed", f"{key}: {value}"
@@ -38,9 +36,9 @@ def format_node(node) -> list | tuple:
 
 
 def format_diff(node: dict) -> tuple | list:
-    name = generate_difference.get_name(node)
-    value = generate_difference.get_value(node)
-    if not generate_difference.has_children(value):
+    name = compose_diff_list.get_name(node)
+    value = compose_diff_list.get_value(node)
+    if not compose_diff_list.has_children(value):
         return format_node(node)
     else:
         children_formatted = list(map(format_diff, value))

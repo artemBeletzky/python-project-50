@@ -1,11 +1,14 @@
-from gendiff import generate_difference
+from .. import compose_diff_list
 
 statuses = {"added": "+ ", "removed": "- ", "both": "  "}
 
 
 # TODO all the functions below should be refactored
 def format_node_with_children(key, children, status, spaces_count):
-    return f"{' ' * spaces_count}{statuses[status]}{key}: {{\n{''.join(children)}{' ' * (spaces_count + 2)}}}\n"
+    return (
+        f"{' ' * spaces_count}{statuses[status]}{key}: "
+        f"{{\n{''.join(children)}{' ' * (spaces_count + 2)}}}\n"
+    )
 
 
 def format_without_children(name, val, spaces_count, status):
@@ -18,7 +21,7 @@ def format_node(name, val, old_val, status, spaces_count):
             format_node_with_children(
                 name, children=val, status="added", spaces_count=spaces_count
             )
-            if generate_difference.has_children(val)
+            if compose_diff_list.has_children(val)
             else format_without_children(name, val, spaces_count, "added")
         )
         formatted_old_val = (
@@ -28,7 +31,7 @@ def format_node(name, val, old_val, status, spaces_count):
                 status="removed",
                 spaces_count=spaces_count,
             )
-            if generate_difference.has_children(old_val)
+            if compose_diff_list.has_children(old_val)
             else format_without_children(name, old_val, spaces_count, "removed")
         )
         return formatted_old_val + formatted_val
@@ -37,18 +40,18 @@ def format_node(name, val, old_val, status, spaces_count):
             format_node_with_children(
                 name, children=val, status=status, spaces_count=spaces_count
             )
-            if generate_difference.has_children(val)
+            if compose_diff_list.has_children(val)
             else format_without_children(name, val, spaces_count, status=status)
         )
 
 
 def traverse(node, spaces_count=2):
-    name = generate_difference.get_name(node)
-    _temp_value = generate_difference.get_value(node)
-    _temp_old_value = generate_difference.get_old_value(node)
+    name = compose_diff_list.get_name(node)
+    _temp_value = compose_diff_list.get_value(node)
+    _temp_old_value = compose_diff_list.get_old_value(node)
     val = (
         _temp_value
-        if not generate_difference.has_children(_temp_value)
+        if not compose_diff_list.has_children(_temp_value)
         else list(
             map(lambda _node: traverse(_node, spaces_count + 4), _temp_value)
         )
@@ -56,7 +59,7 @@ def traverse(node, spaces_count=2):
     old_val = (
         _temp_old_value
         if _temp_old_value is None
-        or not generate_difference.has_children(_temp_old_value)
+        or not compose_diff_list.has_children(_temp_old_value)
         else list(
             map(
                 lambda _node: traverse(_node, spaces_count + 4), _temp_old_value
@@ -67,7 +70,7 @@ def traverse(node, spaces_count=2):
         name=name,
         val=val,
         old_val=old_val,
-        status=generate_difference.get_presence_status(node),
+        status=compose_diff_list.get_presence_status(node),
         spaces_count=spaces_count,
     )
 

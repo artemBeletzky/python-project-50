@@ -1,24 +1,37 @@
 from gendiff.formatters import stylish, json, plain
-from .deserialize import convert_files_to_dict
-from .generate_difference import traverse
+from . import read_data
+from .compose_diff_list import compose_diff_list
+from .convert_files_to_dict import convert_file_data_to_dict
 from .utilities import format_nones_and_bools
+
+formatters = {
+    "stylish": lambda diff: stylish.format_as_stylish(diff),
+    "plain": lambda diff: plain.format_as_plain(diff),
+    "json": lambda diff: json.format_as_json(diff),
+}
 
 
 def generate_diff(
-    file_1_path: str, file_2_path: str, format_name="stylish"
+    file1_path: str, file2_path: str, format_name="stylish"
 ) -> str:
-    # TODO it might only need to read it? why is it all together?
-    items_1, items_2 = convert_files_to_dict(file_1_path, file_2_path)
-
-    diff = traverse(
+    file1_data, file2_data = read_data.read_files_from_disk(
+        file1_path, file2_path
+    )
+    if file1_path.split(".")[1] == file2_path.split(".")[1] == "yml":
+        items_1, items_2 = convert_file_data_to_dict(
+            file1_data, file2_data, "yml"
+        )
+    elif file1_path.split(".")[1] == file2_path.split(".")[1] == "json":
+        items_1, items_2 = convert_file_data_to_dict(
+            file1_data, file2_data, "json"
+        )
+    else:
+        raise Exception(
+            """File extension is not supported or files has extensions
+            that aren't the same, both files should have .json or .yml
+            extensions."""
+        )
+    diff = compose_diff_list(
         format_nones_and_bools(items_1), format_nones_and_bools(items_2)
     )
-    formatted_diff = None
-
-    if format_name == "stylish":
-        formatted_diff = stylish.format_as_stylish(diff)
-    if format_name == "plain":
-        formatted_diff = plain.format_as_plain(diff)
-    if format_name == "json":
-        formatted_diff = json.format_as_json(diff)
-    return formatted_diff
+    return formatters[format_name](diff)

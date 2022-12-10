@@ -1,5 +1,8 @@
-def has_children(value) -> bool:
-    """Receives value from node returns 'true' if this value contains children"""
+def has_children(value: any) -> bool:
+    """
+    Receives value (or old_value) from a node and returns True if
+    this value contains children, returns False otherwise
+    """
     return type(value) == list
 
 
@@ -19,27 +22,39 @@ def get_name(node: dict) -> str:
     return node["name"]
 
 
-def traverse(i1: dict, i2: dict) -> list:
+def compose_diff_list(items1: dict, items2: dict) -> list:
     res = []
-    for key in sorted({*i1.keys(), *i2.keys()}):
-        val1, val2 = i1.get(key), i2.get(key)
+    for key in sorted({*items1.keys(), *items2.keys()}):
+        val1, val2 = items1.get(key), items2.get(key)
         if val1 is not None and val2 is not None:
             if type(val1) == type(val2) == dict:
                 res.append(
                     {
                         "name": key,
                         "presence_status": "both",
-                        "value": traverse(val1, val2),
+                        "value": compose_diff_list(val1, val2),
                     }
                 )
             elif val1 == val2:
-                val = traverse(val1, val1) if type(val1) == dict else val1
+                val = (
+                    compose_diff_list(val1, val1)
+                    if type(val1) == dict
+                    else val1
+                )
                 res.append(
                     {"name": key, "presence_status": "both", "value": val}
                 )
             elif val1 != val2:
-                curr_val = traverse(val2, val2) if type(val2) == dict else val2
-                old_val = traverse(val1, val1) if type(val1) == dict else val1
+                curr_val = (
+                    compose_diff_list(val2, val2)
+                    if type(val2) == dict
+                    else val2
+                )
+                old_val = (
+                    compose_diff_list(val1, val1)
+                    if type(val1) == dict
+                    else val1
+                )
                 res.append(
                     {
                         "name": key,
@@ -49,12 +64,12 @@ def traverse(i1: dict, i2: dict) -> list:
                     }
                 )
         if val2 is None:
-            val = traverse(val1, val1) if type(val1) == dict else val1
+            val = compose_diff_list(val1, val1) if type(val1) == dict else val1
             res.append(
                 {"name": key, "presence_status": "removed", "value": val}
             )
         elif val1 is None:
-            val = traverse(val2, val2) if type(val2) == dict else val2
+            val = compose_diff_list(val2, val2) if type(val2) == dict else val2
             res.append({"name": key, "presence_status": "added", "value": val})
 
     return res
